@@ -1,8 +1,5 @@
 // 基于准备好的dom，初始化echarts实例
-name = []
-anrThreshold = 0.6
-crashThreshold = 0.06
-laggingThreshold = 6.0
+thresholdMap = { "ANR": "0.6", "Crash率": 0.06, "卡顿": 6 }
 var myChart = echarts.init(document.getElementById('main'));
 var appName = "美柚";
 var date = ["2020-01-06", "2020-01-07", "2020-01-08", "2020-01-09", "2020-01-10", "2020-01-11", "2020-01-12"];
@@ -63,7 +60,7 @@ var option = {
         axisPointer: {
             snap: false,
             //阈值
-            value: '4',
+            value: 0,
             handle: {
                 show: false,
                 size: 20,
@@ -74,53 +71,7 @@ var option = {
             label: {
                 show: true,
                 formatter: function (params) {
-                    console.log("拖动手柄");
-                    console.log(params)
-                    //此处进行数据映射比较，改变markpoint的样式
                     var value = (Math.round(params.value * 1000) / 1000).toFixed(3);
-                    console.log("阈值是" + value)
-                    console.log("数据源是" + name)
-                    // 选择数据源
-                    var originData;
-                    var index;
-                    switch (name) {
-                        case 'ANR':
-                            originData = anr
-                            index = 0
-                            break
-                        case 'Crash率':
-                            originData = crash
-                            index = 1
-                            break
-                        case '卡顿':
-                            originData = lagging
-                            index = 2
-                            break
-                        default:
-                            originData = []
-                    }
-                    // 生成markPoint数据后赋值给series
-                    var markArr = [], temObj = null;
-                    console.log(originData)
-                    originData.forEach(function (v, i) {
-                        if (v > value) {
-                            temObj = {
-                                value: v,
-                                xAxis: date[i],
-                                yAxis: v,
-                                itemStyle: {
-                                    color: '#FF0B00'
-                                }
-                            };
-                        } else {
-                            temObj = {};
-                        }
-                        markArr.push(temObj);
-                    });
-                    console.log("markpoint length is :" + markArr.length)
-                    //动态设置markpoint的形状
-                    option.series[index].markPoint = markArr
-                    myChart.setOption(option);
                     return value;
                 },
 
@@ -200,17 +151,22 @@ myChart.on('legendselectchanged', function (params) {
     });
     if (origin.length === 1) {
         //展示阈值参考线
-        // 回调函数
-        name = origin
         option.yAxis.axisPointer.handle.show = true;
+        option.yAxis.axisPointer.value = thresholdMap[origin[0]]
         option.tooltip.triggerOn = 'none';
     } else {
         option.yAxis.axisPointer.handle.show = false;
         option.tooltip.triggerOn = 'mousemove|click';
     }
     myChart.setOption(option);
+    myChart.on('click', function (params) {
+        console.log(params)
+    });
     window.addEventListener("resize", function () {
         myChart.resize();
     });
+
 });
+
+
 
