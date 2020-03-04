@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- 引入 ECharts 文件 -->
+    <script src="echarts.min.js"></script>
+</head>
+
+<body>
+    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+
+
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var chart = echarts.init(document.getElementById('main'));
+
+
+        var xAxisData = [];
+        var data1 = [];
+        var data2 = [];
+
+        for (var i = 0; i < 10; i++) {
+            xAxisData.push('类目' + i);
+            data1.push(+Math.random().toFixed(2));
+            data2.push(+Math.random().toFixed(2));
+        }
+
+        if (console && console.log) {
+            console.log(data1);
+            console.log(data2);
+        }
+
+        chart.setOption({
+            legend: {
+                data: ['line-stack', 'line2-stack', 'line3']
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'line'
+                }
+            },
+            xAxis: {
+                // data: ['类目1', '类目2', '类目3', '类目4', '类目5',]
+                data: xAxisData,
+                boundaryGap: false,
+                // inverse: true,
+                splitArea: {
+                    show: true
+                }
+            },
+            yAxis: {
+                splitLine: {
+                    // show: false
+                }
+            },
+            series: [
+                {
+                    name: 'line-stack',
+                    type: 'line',
+                    stack: 'all',
+                    symbolSize: 6,
+                    areaStyle: { normal: {} },
+                    data: data1,
+
+                    markPoint: {
+                        data: [
+                            {
+                                name: '最大值',
+                                type: 'max',
+                                value: 1
+                            },
+                            {
+                                xAxis: '类目3',
+                                yAxis: 0.5,
+                                value: 2
+                            }
+                        ]
+                    }
+                },
+                {
+                    name: 'line2-stack',
+                    type: 'line',
+                    stack: 'all',
+                    symbolSize: 6,
+                    areaStyle: { normal: {} },
+                    data: data2,
+
+                    markPoint: {
+                        label: {
+                            normal: {
+                                formatter: function (param) {
+                                    return param.name + ' ' + param.value;
+                                },
+                                textStyle: {
+                                    color: '#000'
+                                },
+                                position: 'top'
+                            }
+                        },
+                        data: [
+                            {
+                                name: '最小值stack',
+                                type: 'min',
+                                value: 1
+                            },
+                            {
+                                name: '最大值stack',
+                                type: 'max',
+                                value: 1
+                            },
+                            {
+                                name: '平均值stack',
+                                type: 'average',
+                                value: 1
+                            }
+                        ]
+                    }
+                },
+                {
+                    name: 'line3',
+                    type: 'line',
+                    symbolSize: 6,
+                    data: data2,
+
+                    markPoint: {
+                        label: {
+                            normal: {
+                                formatter: function (param) {
+                                    return param.name + ' ' + (param.value || '');
+                                },
+                                textStyle: {
+                                    color: '#000'
+                                },
+                                position: 'top'
+                            }
+                        },
+                        data: [
+                            {
+                                name: '任意屏幕位置',
+                                value: 111,
+                                extData: { a: 1, b: 2 },
+                                x: 50, y: 100
+                            },
+                            {
+                                name: '000000000',
+                                coord: ['类目2', 0.6],
+                                value: 1
+                            },
+                            {
+                                name: '最小值',
+                                type: 'min',
+                                value: 1
+                            },
+                            {
+                                name: '最大值x',
+                                type: 'max',
+                                value: 1
+                            },
+                            {
+                                name: '最大值y',
+                                type: 'max',
+                                valueIndex: 0,
+                                value: 1
+                            },
+                            {
+                                name: '平均值',
+                                type: 'average',
+                                value: 1
+                            },
+                            {
+                                name: 'Y轴固定',
+                                xAxis: 'max',
+                                y: 100
+                            }
+                        ]
+                    }
+                }
+            ]
+        });
+
+        chart.on('click', function (params) {
+            console.log(params, params.data);
+        });
+    </script>
+</body>
+
+</html>

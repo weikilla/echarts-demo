@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- 引入 ECharts 文件 -->
+    <script src="echarts.min.js"></script>
+</head>
+
+<body>
+    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+
+
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var option = {
+            title: {
+                text: 'Awesome Chart'
+            },
+            xAxis: {
+                data: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                axisPointer: {
+                    show: true,
+                    snap: true
+                }
+            },
+            yAxis: {
+                axisPointer: {
+                    show: true,
+                    snap: true
+                }
+            },
+            series: [{
+                type: 'line',
+                data: [220, 182, 191, 234, 290, 330, 310]
+            }]
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+        myChart.on('click', function (params) {
+            // 控制台打印数据的名称
+            console.log(params.name);
+        });
+    </script>
+</body>
+
+</html>

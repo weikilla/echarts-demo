@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <!-- 引入 ECharts 文件 -->
+    <script src="echarts.min.js"></script>
+</head>
+
+<body>
+    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+
+
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var data = [50, 100, 91, 34, 90, 30, 20];
+        var markArr = [], temObj = null;
+        data.forEach(function (v, i) {
+            if (v > 50) {
+                temObj = {
+                    value: v,
+                    xAxis: i,
+                    yAxis: v,
+                    itemStyle: {
+                        color: '#FF0B00'
+                    }
+                }
+            } else {
+                temObj = {
+
+                }
+            }
+            markArr.push(temObj)
+        });
+
+        console.log(markArr)
+        option = {
+            xAxis: {
+                type: 'category',
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: data,
+                type: 'line',
+                smooth: true,
+                markPoint: {
+                    itemStyle: {
+                        color: '#00CD68'
+                    },
+                    data: markArr
+                },
+            }]
+        };
+
+
+
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+
+        window.addEventListener("resize", function () {
+            myChart.resize();
+        });
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+        myChart.on('click', function (params) {
+            // 控制台打印数据的名称
+            console.log(params.name);
+        });
+        window.addEventListener("resize", function () {
+            myChart.resize();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <!--第一步： 引入 ECharts 文件 -->
+    <script src="echarts.min.js"></script>
+</head>
+
+<body>
+    <!--第二步：指定一个容器用来存放echarts，也就是一个设置宽高属性的 DOM节点 -->
+    <div id="box" style="width: 600px;height:400px;"></div>
+</body>
+
+<script>
+    // 获取到这个DOM节点，然后初始化
+
+    var myChart = echarts.init(document.getElementById("box"));
+
+    // option 里面的内容基本涵盖你要画的图表的所有内容
+    var option = {
+        backgroundColor: '#FBFBFB',
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['充值', '消费']
+        },
+
+        calculable: true,
+
+
+        xAxis: [
+            {
+                axisLabel: {
+                    rotate: 30,
+                    interval: 0
+                },
+                axisLine: {
+                    lineStyle: {
+                        color: '#CECECE'
+                    }
+                },
+                type: 'category',
+                boundaryGap: false,
+                data: function () {
+                    var list = [];
+                    for (var i = 10; i <= 18; i++) {
+                        if (i <= 12) {
+                            list.push('2016-' + i + '-01');
+                        } else {
+                            list.push('2017-' + (i - 12) + '-01');
+                        }
+                    }
+                    return list;
+                }()
+            }
+        ],
+        yAxis: [
+            {
+
+                type: 'value',
+                axisLine: {
+                    lineStyle: {
+                        color: '#CECECE'
+                    }
+                }
+            }
+        ],
+        series: [
+            {
+                name: '充值',
+                type: 'line',
+                symbol: 'none',
+                smooth: 0.2,
+                color: ['#66AEDE'],
+                data: [800, 300, 500, 800, 300, 600, 500, 600]
+            },
+            {
+                name: '消费',
+                type: 'line',
+                symbol: 'none',
+                smooth: 0.2,
+                color: ['#90EC7D'],
+                data: [600, 300, 400, 200, 300, 300, 200, 400]
+            }
+        ]
+    };
+
+
+
+
+
+
+
+    // 一定不要忘了这个，具体是干啥的我忘了，官网是这样写的使用刚指定的配置项和数据显示图表。  
+    myChart.setOption(option);
+</script>
+
+</html>
