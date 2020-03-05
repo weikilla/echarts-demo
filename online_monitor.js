@@ -1,6 +1,8 @@
 // 基于准备好的dom，初始化echarts实例
 thresholdMap = { "ANR": "0.6", "Crash率": 0.06, "卡顿": 6 }
-var myChart = echarts.init(document.getElementById('main'));
+currentTargetLine = 0
+whichTarget = ''
+var myChart = echarts.init(document.getElementById('main'), null, { renderer: 'svg' });
 var appName = "美柚";
 var date = ["2020-01-06", "2020-01-07", "2020-01-08", "2020-01-09", "2020-01-10", "2020-01-11", "2020-01-12"];
 var anr = ["0.58", "0.59", "0.64", "0.73", "0.77", "0.77", "0.78"];
@@ -21,9 +23,7 @@ var option = {
             }
             return res;
         },
-        axisPointer: {
-            type: 'line',
-        }
+
     },
     legend: {
         data: ['ANR', 'Crash率', '卡顿']
@@ -49,16 +49,15 @@ var option = {
         throttle: 50
     }],
     yAxis: {
-
         type: 'value',
         axisLabel: {
             show: true,
             interval: 'auto',
             formatter: '{value} %',
         },
+        triggerEvent: true,
         show: true,
         axisPointer: {
-            snap: false,
             //阈值
             value: 0,
             handle: {
@@ -68,17 +67,18 @@ var option = {
                 color: '#DC143C',
                 throttle: 100
             },
+            snap: false,
+            triggerTooltip: false,
             label: {
                 show: true,
                 formatter: function (params) {
                     var value = (Math.round(params.value * 1000) / 1000).toFixed(3);
+                    currentTargetLine = value
                     return value;
                 },
 
             },
         },
-
-
     },
     series: [
         {
@@ -138,7 +138,6 @@ var option = {
 };
 // 使用刚指定的配置项和数据显示图表。
 myChart.setOption(option);
-
 myChart.on('legendselectchanged', function (params) {
     //判断select里是否只有一个true
     // selected: {ANR: true, Crash率: true, 卡顿: false}
@@ -159,14 +158,21 @@ myChart.on('legendselectchanged', function (params) {
         option.tooltip.triggerOn = 'mousemove|click';
     }
     myChart.setOption(option);
-    myChart.on('click', function (params) {
-        console.log(params)
-    });
+
     window.addEventListener("resize", function () {
         myChart.resize();
     });
-
 });
+function mouseup() {
+    //更改markpoint操作
+    // 源和阈值
+    console.log("阈值：" + currentTargetLine)
+    var selected = option.legend.selected;
+    console.log(selected)
+
+
+}
+
 
 
 
