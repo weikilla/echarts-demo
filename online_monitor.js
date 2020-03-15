@@ -1,14 +1,12 @@
 // 基于准备好的dom，初始化echarts实例
 thresholdMap = { "ANR": "0.6", "Crash率": 0.06, "卡顿": 6 }
-currentTargetLine = 0
-currentLegend = ''
-var myChart = echarts.init(document.getElementById('main'), null, { renderer: 'svg' });
+var myChart = echarts.init(document.getElementById('main'));
 var appName = "美柚";
 var date = ["2020-01-06", "2020-01-07", "2020-01-08", "2020-01-09", "2020-01-10", "2020-01-11", "2020-01-12"];
 var anr = ["0.58", "0.59", "0.64", "0.73", "0.77", "0.77", "0.78"];
 var crash = ["0.05", "0.06", "0.04", "0.07", "0.10", "0.09", "0.09"];
 var lagging = ["6.19", "5.83", "5.95", "6.58", "6.33", "6.76", "6.38"];
-dataMap = { "ANR": anr, "Crash率": crash, "卡顿": lagging }
+
 var option = {
     title: {
         text: appName
@@ -34,11 +32,6 @@ var option = {
         bottom: '3%',
         containLabel: true
     },
-    toolbox: {
-        feature: {
-            saveAsImage: {}
-        }
-    },
     xAxis: {
         type: 'category',
         boundaryGap: true,
@@ -57,28 +50,6 @@ var option = {
         },
         triggerEvent: true,
         show: true,
-        axisPointer: {
-            //阈值
-            value: 0,
-            handle: {
-                show: false,
-                size: 20,
-                margin: 60,
-                color: '#DC143C',
-                throttle: 100
-            },
-            snap: false,
-            triggerTooltip: false,
-            label: {
-                show: true,
-                formatter: function (params) {
-                    var value = (Math.round(params.value * 1000) / 1000).toFixed(3);
-                    currentTargetLine = value
-                    return value;
-                },
-
-            },
-        },
     },
     series: [
         {
@@ -166,7 +137,6 @@ var option = {
 // 使用刚指定的配置项和数据显示图表。
 myChart.setOption(option);
 myChart.on('legendselectchanged', function (params) {
-    console.log("监听legend改变")
     var selected = params.selected;
     let origin = []
     Object.keys(selected).forEach(function (item) {
@@ -174,16 +144,11 @@ myChart.on('legendselectchanged', function (params) {
             origin.push(item);
         }
     });
-    console.log("origin length is :" + origin.length);
     if (origin.length === 1) {
         //展示阈值参考线
-        currentLegend = origin[0]
-        option.yAxis.axisPointer.handle.show = true;
-        option.yAxis.axisPointer.value = thresholdMap[origin[0]]
-        option.tooltip.triggerOn = 'none';
+
     } else {
-        option.yAxis.axisPointer.handle.show = false;
-        option.tooltip.triggerOn = 'mousemove|click';
+
     }
     myChart.setOption(option);
 

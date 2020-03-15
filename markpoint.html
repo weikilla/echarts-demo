@@ -21,7 +21,6 @@
         data.forEach(function (v, i) {
             if (v > 50) {
                 temObj = {
-                    value: v,
                     xAxis: i,
                     yAxis: v,
                     itemStyle: {
@@ -50,8 +49,10 @@
                 type: 'line',
                 smooth: true,
                 markPoint: {
-                    itemStyle: {
-                        color: '#00CD68'
+                    symbol: 'circle',
+                    symbolSize: 20,
+                    label: {
+                        show: false
                     },
                     data: markArr
                 },

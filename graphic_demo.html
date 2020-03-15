@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <script src="echarts.min.js"></script>
 </head>
+<!-- 研究graphic绘制位置的规则 -->
 
 <body>
     <div id="main" style="width: 600px;height:400px;"></div>
@@ -46,22 +47,40 @@
         });
 
         myChart.setOption({
-            graphic: echarts.util.map(data, function (item, dataIndex) {
-                return {
-                    type: 'circle',
-                    position: myChart.convertToPixel('grid', ['-60', '12']),
-                    shape: {
-                        r: symbolSize / 2
-                    },
-                    invisible: false,
-                    draggable: true,
-                    ondrag: echarts.util.curry(onPointDragging, dataIndex),
-                    onmousemove: echarts.util.curry(showTooltip, dataIndex),
-                    onmouseout: echarts.util.curry(hideTooltip, dataIndex),
-                    z: 100
-                };
-            })
+            graphic: {
+                type: 'circle',
+                id: 'circle',
+                shape: {
+                    r: 10
+                },
+                position: myChart.convertToPixel('grid', [-60, 30]),
+                style: {
+                    fill: '#fff',
+                    stroke: 'red'
+                },
+                draggable: true,
+                z: 100,
+                ondrag: echarts.util.curry(onPointDragging),
+            }
+            // graphic: echarts.util.map(data, function (item, dataIndex) {
+            //     console.log("item is:" + item)
+            //     console.log("type is " + typeof item)
+            //     return {
+            //         type: 'circle',
+            //         position: myChart.convertToPixel('grid', item),
+            //         shape: {
+            //             r: symbolSize / 2
+            //         },
+            //         invisible: true,
+            //         draggable: true,
+            //         ondrag: echarts.util.curry(onPointDragging, dataIndex),
+            //         onmousemove: echarts.util.curry(showTooltip, dataIndex),
+            //         onmouseout: echarts.util.curry(hideTooltip, dataIndex),
+            //         z: 100
+            //     };
+            // })
         });
+
 
         window.addEventListener('resize', function () {
             myChart.setOption({
@@ -88,15 +107,15 @@
         }
 
         function onPointDragging(dataIndex, dx, dy) {
-
-            console.log(this.position)
-            data[dataIndex] = myChart.convertFromPixel('grid', this.position);
-            myChart.setOption({
-                series: [{
-                    id: 'a',
-                    data: data
-                }]
-            });
+            y = myChart.convertFromPixel('grid', this.position);
+            console.log(y)
+            // data[dataIndex] = myChart.convertFromPixel('grid', this.position);
+            // myChart.setOption({
+            //     series: [{
+            //         id: 'a',
+            //         data: data
+            //     }]
+            // });
         }
 
     </script>

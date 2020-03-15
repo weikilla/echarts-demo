@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>刷新axisxPoint</title>
+    <!-- 引入 ECharts 文件 -->
+    <script src="echarts.min.js"></script>
+</head>
+
+<body>
+    <!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
+
+
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script type="text/javascript">
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        var data1 = 200;
+        var data2 = [1221, 932, 901, 934, 1290, 1330, 1320];
+
+        option = {
+            xAxis: {
+                type: 'category',
+                data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            },
+            yAxis: {
+                type: 'value',
+                axisPointer: {
+                    show: true,
+                    value: data1,
+                    lineStyle: {
+                        color: '#004E52',
+                        opacity: 0.5,
+                        width: 2
+                    },
+                    handle: {
+                        show: true,
+                        size: 0,
+                        //color: '#004E52'
+                        triggerOn: 'none'
+                    }
+                }
+            },
+            series: [{
+                type: 'bar',
+                data: data2
+            }, {
+                type: 'line',
+                data: data2,
+            }]
+        };
+
+        function updateData() {
+            data1 = Math.random() * 1000;
+        }
+
+        setInterval(function () {
+            updateData(); myChart.setOption({
+                yAxis: {
+                    type: 'value',
+                    axisPointer: {
+                        show: true,
+                        value: data1,
+                        lineStyle: {
+                            color: '#004E52',
+                            opacity: 0.5,
+                            width: 2
+                        },
+                        handle: {
+                            show: true,
+                            size: 0,
+                            color: '#004E52',
+                            triggerOn: 'none'
+                        }
+                    }
+                }
+            });
+        }, 1000);
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+        myChart.on('click', function (params) {
+            // 控制台打印数据的名称
+            console.log(params.name);
+        });
+    </script>
+</body>
+
+</html>
